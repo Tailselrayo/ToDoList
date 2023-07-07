@@ -1,3 +1,5 @@
+"use client"
+import { MantineProvider, MantineTheme } from '@mantine/core'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -12,9 +14,22 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const spacing = { xs: "5px", sm: "18px", md: "40px", lg: "60px", xl: "100px" };
+  const generateTheme = (theme: MantineTheme) => {
+    return ({
+      ".mantine-List-itemWrapper": {
+        display: "block"
+      }
+    })
+  }
+
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <MantineProvider theme={{globalStyles: generateTheme, spacing}}>
+          {children}
+        </MantineProvider>
+      </body>
     </html>
   )
 }
