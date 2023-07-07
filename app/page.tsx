@@ -3,7 +3,7 @@ import { Todolist } from "@/components/Todolist";
 import { TaskType } from "@/types/TaskType";
 import { AppShell, Group, TextInput, Button, Title, Stack } from "@mantine/core";
 import { useInputState, useListState } from "@mantine/hooks";
-import { FormEvent } from "react";
+import { ChangeEvent, FormEvent } from "react";
 
 export default function Home() {  //default est à utiliser pour les pages
   const [task, setTask] = useInputState('');
@@ -25,10 +25,20 @@ export default function Home() {  //default est à utiliser pour les pages
     );
   }
 
+  const onDelete = (task: TaskType) => {
+    handlers.filter((elem) => elem.description !== task.description )
+  }
+
+  const onEdit = (task: TaskType, e:string) => {
+    return (
+      console.log('')
+    )
+  }
+
+
   return (
     <AppShell>
-      <Stack maw={600} mx="auto" spacing="xl">
-        <Title>{task}</Title>
+      <Stack maw={600} mx="auto" spacing="lg">
         <form onSubmit={onSubmit}>
           <Group align="end" w="100%" grow>
             <TextInput
@@ -52,7 +62,7 @@ export default function Home() {  //default est à utiliser pour les pages
             </Button>
           </Group>
         </form>
-        <Todolist onChange={onChange} tasks={toDoList}/>
+        <Todolist onChange={onChange} onDelete={onDelete} tasks={toDoList} onEdit={onEdit}/>
       </Stack>
     </AppShell>
   )
