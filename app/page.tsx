@@ -30,8 +30,9 @@ export default function Home() {  //default est à utiliser pour les pages
   }
 
   const onEdit = (task: TaskType, e:string) => {
-    return (
-      console.log('')
+    handlers.applyWhere(
+      (elem) => elem.description === task.description,
+      () => ({description: e, done: task.done}) 
     )
   }
 
