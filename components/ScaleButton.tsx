@@ -7,6 +7,7 @@ interface ScaleButtonProps {
     tooltipLabel: string;
     color: MantineColor;
     icon: ReactNode;
+    disabled?: boolean;
 }
 
 export function ScaleButton(props: ScaleButtonProps) {
@@ -22,6 +23,7 @@ export function ScaleButton(props: ScaleButtonProps) {
                             color={props.color}
                             ta="center"
                             style={styles}
+                            disabled={props.disabled}
                         >
                             {props.icon}
                         </ActionIcon>
