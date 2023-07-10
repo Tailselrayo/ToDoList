@@ -12,8 +12,10 @@ export function Checkbox(props: CheckboxProps) {
             checked={props.done}
             label={
                 <Text
+                    w={400}
                     td={props.done ? "line-through" : "none"}
                     c={props.done ? "dimmed" : "none"}
+                    truncate
                 >
                     {props.description}
                 </Text>
