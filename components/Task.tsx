@@ -1,11 +1,10 @@
 import { TaskType } from "@/types/TaskType";
-import { Badge, Box, Group, List, NativeSelect, Text, TextInput, Transition, useInputProps } from "@mantine/core";
-import { FormEvent, useEffect, useState } from "react";
+import { Badge, Box, Group, List, NativeSelect, Text, TextInput } from "@mantine/core";
+import { FormEvent, useState } from "react";
 import { IconPencil, IconTrash, IconCheck } from "@tabler/icons-react";
 import { Checkbox } from "./Checkbox";
 import { ScaleButton } from "./ScaleButton";
-import { useInputState } from "@mantine/hooks";
-import { convertToObject } from "typescript";
+import { GenericTransition } from "./GenericTransition";
 
 interface TaskProps extends TaskType {
     onChange: (task: TaskType) => void;
@@ -17,7 +16,6 @@ interface TaskProps extends TaskType {
 
 export function Task(props: TaskProps) {
     const [isOver, setIsOver] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
 
     const onSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -39,12 +37,10 @@ export function Task(props: TaskProps) {
         return "green"
     }
 
-    useEffect(() => setIsMounted(true), []);
     return (
         <List.Item onMouseOver={() => setIsOver(true)} onMouseLeave={() => setIsOver(false)}>
-            <Transition mounted={isMounted} transition="scale" duration={1000}>
-                {(styles) => (
-                    <Group w="100%" style={styles} bg={isOver || props.isEditing ? "gray.1" : "white"} p={3}>
+            <GenericTransition>
+                    <Group w="100%" bg={isOver || props.isEditing ? "gray.1" : "white"} p={3}>
                         <Group position="apart" w="100%" bg="white" p={5}>
                             {props.isEditing ?
                                 <form onSubmit={onSubmit}>
@@ -99,8 +95,7 @@ export function Task(props: TaskProps) {
                             </Group>
                         </Group>
                     </Group>
-                )}
-            </Transition>
+            </GenericTransition>
         </List.Item>
     )
 }

@@ -1,5 +1,5 @@
 "use client"
-import { MantineProvider, MantineTheme } from '@mantine/core'
+import { AppShell, MantineProvider, MantineTheme } from '@mantine/core'
 import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -27,7 +27,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <MantineProvider theme={{globalStyles: generateTheme, spacing}}>
-          {children}
+          <AppShell>
+            {children}
+          </AppShell>
         </MantineProvider>
       </body>
     </html>
