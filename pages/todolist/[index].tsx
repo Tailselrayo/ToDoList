@@ -4,12 +4,39 @@ import { useStoredTodolist } from "@/hooks/useStoredTodolist";
 import { AppShell, Group, TextInput, Button, Stack, NativeSelect } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { randomBytes } from "crypto";
-import { FormEvent } from "react";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { useRouter } from "next/router";
+import { FormEvent, useEffect } from "react";
 
-export default function TodolistPage() {  //default est à utiliser pour les pages
+interface TodolistPageProps {
+  index: number;
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const params = context.params;
+  if (!params || !params.index || Array.isArray(params.index) || isNaN(parseInt(params.index))) {
+    return (
+      {
+        redirect: {
+          destination: "/",
+          permanent: false,
+        }
+      }
+    )
+  }
+
+  return ({
+    props: {
+      index: parseInt(params.index)
+    }
+  })
+}
+
+export default function TodolistPage(props: TodolistPageProps) {  //default est à utiliser pour les pages
   const [task, setTask] = useInputState('');
   const [priority, setPriority] = useInputState<PriorityType>("minor");
-  const { toDoList, handlers } = useStoredTodolist();
+  const routeur = useRouter();
+  const { toDoList, handlers, isError } = useStoredTodolist(props.index);
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -25,6 +52,12 @@ export default function TodolistPage() {  //default est à utiliser pour les pag
     }
 
   }
+
+  useEffect(() => {
+    if (isError) {
+      routeur.push("/");
+    }
+  }, [isError])
 
   return (
     <Stack maw={700} mx="auto" spacing="lg">
@@ -50,7 +83,7 @@ export default function TodolistPage() {  //default est à utiliser pour les pag
             maw={150}
             type="submit"
             size="xl"
-            gradient={{from:"blue",to:"teal"}}
+            gradient={{ from: "blue", to: "teal" }}
             variant="gradient">
             submit
           </Button>
