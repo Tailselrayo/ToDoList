@@ -8,6 +8,17 @@ export function useTodolistContainer() {
     const [storage, setStorage] = useLocalStorage<TodolistData[]>({ key: "toDoList" });
     const [isStorageLoaded, setIsStorageLoaded] = useState(false);
 
+    const remove = (id: string) => {
+        handlers.filter((elem) => elem.id !== id)
+    } 
+
+    const edit = (list: TodolistData) => {
+        handlers.applyWhere(
+            (elem) => elem.id === list.id,
+            (elem) => ({...elem, name: list.name,color:  list.color})
+        )
+    }
+
     useEffect(() => {
 
         if (isStorageLoaded || toDoListList.length) {
@@ -25,7 +36,7 @@ export function useTodolistContainer() {
     return (
         {
             toDoListList,
-            handlers: {add: handlers.append}
+            handlers: {add: handlers.append, remove, edit}
         }
     )
 
