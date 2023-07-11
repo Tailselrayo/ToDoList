@@ -8,6 +8,7 @@ export function useStoredTodolist(index: number) {
     const [toDoList, handlers] = useListState<TaskType>([]);
     const [storage, setStorage] = useLocalStorage<TodolistData[]>({ key: "toDoList" });
     const [isStorageLoaded, setIsStorageLoaded] = useState(false);
+    const [isError, setIsError] = useState(false);
 
     const applyOnId = (newTask: TaskType) => {
         handlers.applyWhere(
@@ -39,9 +40,10 @@ export function useStoredTodolist(index: number) {
     }
 
     useEffect(() => {
-        const copy = storage.slice();
+        let copy: TodolistData[];
         let item: TodolistData;
         if (isStorageLoaded) {
+            copy = storage.slice();
             item = copy[index];
             item.toDoList = toDoList.map((elem) => ({ ...elem, isEditing: false }))
             copy[index] = item;
@@ -51,6 +53,10 @@ export function useStoredTodolist(index: number) {
 
     useEffect(() => {
         if (!isStorageLoaded && storage) {
+            if (!storage[index]) {
+                setIsError(true);
+                return;
+            }
             handlers.setState(storage[index].toDoList);
             setIsStorageLoaded(true);
         }
@@ -59,7 +65,8 @@ export function useStoredTodolist(index: number) {
     return (
         {
             toDoList,
-            handlers: {add: handlers.append, change, edit, toggleEdit, delete: deleteTask, priorityChange}
+            handlers: {add: handlers.append, change, edit, toggleEdit, delete: deleteTask, priorityChange},
+            isError
         }
     )
 

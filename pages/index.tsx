@@ -2,16 +2,16 @@ import { ColorSelector } from "@/components/ColorSelector";
 import { GenericTransition } from "@/components/GenericTransition";
 import { useTodolistContainer } from "@/hooks/useTodolistContainer";
 import { ColorPair } from "@/types/ColorPair";
-import { TodolistData } from "@/types/TodolistData";
-import { Text, ActionIcon, Card, Center, Modal, SimpleGrid, Stack, TextInput, Title, useMantineTheme, Group, Button } from "@mantine/core";
-import { useDisclosure, useInputState, useListState } from "@mantine/hooks";
+import { Text, Card, Center, Modal, SimpleGrid, Stack, TextInput, Title, useMantineTheme, Group, Button } from "@mantine/core";
+import { useDisclosure, useInputState } from "@mantine/hooks";
 import { IconPlus } from "@tabler/icons-react";
 import { randomBytes } from "crypto";
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 
 export default function Home() {
-    const {toDoListList, handlers} = useTodolistContainer();
+    const { toDoListList, handlers } = useTodolistContainer();
     const [isModalOpened, modalHandlers] = useDisclosure(false);
     const [title, setTitle] = useInputState('');
     const [selectedColor, setSelectedColor] = useState<ColorPair>(["blue", "teal"]);
@@ -70,15 +70,17 @@ export default function Home() {
             </Modal>
             <SimpleGrid cols={4}>
                 <Center onClick={onCreate} h={150} bg="gray.3" style={{ borderRadius: theme.radius.md, cursor: "pointer" }}>
-                    <IconPlus size={75} strokeWidth={1}/>
+                    <IconPlus size={75} strokeWidth={1} />
                 </Center>
                 {
-                    toDoListList.map((elem) => {
+                    toDoListList.map((elem, index) => {
                         return (
-                            <GenericTransition>
-                                <Card h={150} bg={theme.fn.linearGradient(135, ...elem.color)}>
-                                    {elem.name}
-                                </Card>
+                            <GenericTransition key={index}>
+                                <Link href={`/todolist/${index}`}>
+                                    <Card h={150} bg={theme.fn.linearGradient(135, ...elem.color)}>
+                                        {elem.name}
+                                    </Card>
+                                </Link>
                             </GenericTransition>
                         )
                     })
