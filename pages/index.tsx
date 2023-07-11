@@ -1,14 +1,13 @@
 import { ColorSelector } from "@/components/ColorSelector";
-import { GenericTransition } from "@/components/GenericTransition";
 import { Layout } from "@/components/Layout"
-import { ScaleButton } from "@/components/ScaleButton";
+import { TodolistCard } from "@/components/TodolistCard";
 import { useTodolistContainer } from "@/hooks/useTodolistContainer";
 import { ColorPair } from "@/types/ColorPair";
-import { Text, Card, Center, Modal, SimpleGrid, Stack, TextInput, Title, useMantineTheme, Group, Button, Box } from "@mantine/core";
+import { TodolistData } from "@/types/TodolistData";
+import { Text, Center, Modal, SimpleGrid, Stack, TextInput, Title, useMantineTheme, Group, Button } from "@mantine/core";
 import { useDisclosure, useInputState } from "@mantine/hooks";
-import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
+import {  IconPlus } from "@tabler/icons-react";
 import { randomBytes } from "crypto";
-import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 
@@ -17,6 +16,7 @@ export default function Home() {
     const [isModalOpened, modalHandlers] = useDisclosure(false);
     const [title, setTitle] = useInputState('');
     const [selectedColor, setSelectedColor] = useState<ColorPair>(["blue", "teal"]);
+    const [editId, setEditId] = useState('');
 
     const colors: ColorPair[] = [["blue", "teal"], ["orange", "red"], ["indigo", "cyan"], ["lime", "green"], ["pink", "orange"]]
     const theme = useMantineTheme();
@@ -25,18 +25,26 @@ export default function Home() {
         modalHandlers.open();
     }
 
-    const onChange = () => {
+    const onRemove = (id: string) => {
+        handlers.remove(id);
+    }
 
+    const onEdit = (list: TodolistData) => {
+        modalHandlers.open();
+        setEditId(list.id);
+        setTitle(list.name);
+        setSelectedColor(list.color);
     }
 
     const onSubmit = (e: FormEvent) => {
         e.preventDefault();
         if (title.trim()) {
             modalHandlers.close();
-            handlers.add({
-                id: randomBytes(10).toString("hex"), toDoList: [], name: title, color: selectedColor
-            })
-            modalHandlers.close();
+   
+            handlers[editId? "edit" : "add"](
+                {id: (editId) ? editId : randomBytes(10).toString("hex"), toDoList: [], name: title, color: selectedColor }
+            )
+            setEditId('')
             setTitle('');
         }
     }
@@ -46,7 +54,7 @@ export default function Home() {
             <Modal
                 onClose={modalHandlers.close}
                 opened={isModalOpened}
-                title={<Title size="md">Create a new to-do list</Title>}
+                title={(editId) ? <Title size="md">Edit selected to-do list</Title> : <Title size="md">Create a new to-do list</Title>}
             >
                 <form onSubmit={onSubmit}>
                     <Stack>
@@ -70,47 +78,26 @@ export default function Home() {
                     </Stack>
                 </form>
             </Modal>
-            <SimpleGrid cols={4}>
-                <Center onClick={onCreate} h={150} bg="gray.3" style={{ borderRadius: theme.radius.md, cursor: "pointer" }}>
-                    <IconPlus size={75} strokeWidth={1} />
-                </Center>
+            <SimpleGrid
+                breakpoints={[{maxWidth: "md", cols:3}, {maxWidth: "sm", cols:2}, {maxWidth: "xs", cols:1}]}
+                cols={4}
+            >
                 {
                     toDoListList.map((elem, index) => {
                         return (
-                            <GenericTransition key={index}>
-                                <Link href={`/todolist/${index}`}>
-                                    <Card h={150} bg={theme.fn.linearGradient(135, ...elem.color)}>
-                                        <Stack>
-                                            <Title ta="center">{elem.name}</Title>
-                                            <Group position="apart">
-                                                <Box></Box>
-                                                <Box w="100%" h={200}>
-                                                    <Group position="right">
-                                                        <ScaleButton
-                                                            onClick={() => { }}
-                                                            isOver={true}
-                                                            tooltipLabel={"Edit"}
-                                                            color={"dark"}
-                                                            icon={<IconPencil />}
-                                                        />
-                                                        <ScaleButton
-                                                            onClick={() => { }}
-                                                            isOver={true}
-                                                            tooltipLabel={"Remove"}
-                                                            color={"dark"}
-                                                            icon={<IconTrash />}
-                                                        />
-                                                    </Group>
-                                                </Box>
-                                            </Group>
-                                        </Stack>
-
-                                    </Card>
-                                </Link>
-                            </GenericTransition>
+                            <TodolistCard
+                                key={index}
+                                {...elem}
+                                index={index}
+                                onEdit={onEdit}
+                                onRemove={onRemove}
+                            />
                         )
                     })
                 }
+                <Center onClick={modalHandlers.open} h={150} bg="gray.3" style={{ borderRadius: theme.radius.md, cursor: "pointer" }}>
+                    <IconPlus size={75} strokeWidth={1} />
+                </Center>
             </SimpleGrid>
 
         </Layout>
