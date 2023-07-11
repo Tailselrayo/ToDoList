@@ -1,10 +1,11 @@
 "use client";
+import {Layout} from "@/components/Layout";
 import { Todolist } from "@/components/Todolist";
 import { useStoredTodolist } from "@/hooks/useStoredTodolist";
-import { AppShell, Group, TextInput, Button, Stack, NativeSelect } from "@mantine/core";
+import {  Group, TextInput, Button, Stack, NativeSelect } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { randomBytes } from "crypto";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import {  GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { FormEvent, useEffect } from "react";
 
@@ -59,45 +60,47 @@ export default function TodolistPage(props: TodolistPageProps) {  //default est 
     }
   }, [isError])
 
+  useEffect(()=>handlers.changeIndex(props.index),[props, handlers])
   return (
-    <Stack maw={700} mx="auto" spacing="lg">
-      <form onSubmit={onSubmit}>
-        <Group align="end" w="100%" grow>
-          <TextInput
-            value={task}
-            onChange={setTask}
-            autoComplete="off"
-            maw="100%"
-            minLength={5}
-            placeholder="Ex. Doing chores"
-            label="Add task"
-            size="xl"
-          />
-          <NativeSelect
-            data={["critical", "major", "minor"]}
-            value={priority}
-            onChange={setPriority}
-            size="xl"
-          />
-          <Button
-            maw={150}
-            type="submit"
-            size="xl"
-            gradient={{ from: "blue", to: "teal" }}
-            variant="gradient">
-            submit
-          </Button>
-        </Group>
-      </form>
-      <Todolist
-        onChange={handlers.change}
-        onDelete={handlers.delete}
-        tasks={toDoList}
-        onEdit={handlers.edit}
-        priorityChange={handlers.priorityChange}
-        onToggleEdit={handlers.toggleEdit}
-      />
-    </Stack>
-
+    <Layout>
+      <Stack maw={700} mx="auto" spacing="lg">
+        <form onSubmit={onSubmit}>
+          <Group align="end" w="100%" grow>
+            <TextInput
+              value={task}
+              onChange={setTask}
+              autoComplete="off"
+              maw="100%"
+              minLength={5}
+              placeholder="Ex. Doing chores"
+              label="Add task"
+              size="xl"
+            />
+            <NativeSelect
+              data={["critical", "major", "minor"]}
+              value={priority}
+              onChange={setPriority}
+              size="xl"
+            />
+            <Button
+              maw={150}
+              type="submit"
+              size="xl"
+              gradient={{ from: "blue", to: "teal" }}
+              variant="gradient">
+              submit
+            </Button>
+          </Group>
+        </form>
+        <Todolist
+          onChange={handlers.change}
+          onDelete={handlers.delete}
+          tasks={toDoList}
+          onEdit={handlers.edit}
+          priorityChange={handlers.priorityChange}
+          onToggleEdit={handlers.toggleEdit}
+        />
+      </Stack>
+    </Layout>
   )
 }

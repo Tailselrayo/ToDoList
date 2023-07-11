@@ -1,10 +1,12 @@
 import { ColorSelector } from "@/components/ColorSelector";
 import { GenericTransition } from "@/components/GenericTransition";
+import { Layout } from "@/components/Layout"
+import { ScaleButton } from "@/components/ScaleButton";
 import { useTodolistContainer } from "@/hooks/useTodolistContainer";
 import { ColorPair } from "@/types/ColorPair";
-import { Text, Card, Center, Modal, SimpleGrid, Stack, TextInput, Title, useMantineTheme, Group, Button } from "@mantine/core";
+import { Text, Card, Center, Modal, SimpleGrid, Stack, TextInput, Title, useMantineTheme, Group, Button, Box } from "@mantine/core";
 import { useDisclosure, useInputState } from "@mantine/hooks";
-import { IconPlus } from "@tabler/icons-react";
+import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { randomBytes } from "crypto";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
@@ -40,7 +42,7 @@ export default function Home() {
     }
 
     return (
-        <>
+        <Layout>
             <Modal
                 onClose={modalHandlers.close}
                 opened={isModalOpened}
@@ -78,7 +80,31 @@ export default function Home() {
                             <GenericTransition key={index}>
                                 <Link href={`/todolist/${index}`}>
                                     <Card h={150} bg={theme.fn.linearGradient(135, ...elem.color)}>
-                                        {elem.name}
+                                        <Stack>
+                                            <Title ta="center">{elem.name}</Title>
+                                            <Group position="apart">
+                                                <Box></Box>
+                                                <Box w="100%" h={200}>
+                                                    <Group position="right">
+                                                        <ScaleButton
+                                                            onClick={() => { }}
+                                                            isOver={true}
+                                                            tooltipLabel={"Edit"}
+                                                            color={"dark"}
+                                                            icon={<IconPencil />}
+                                                        />
+                                                        <ScaleButton
+                                                            onClick={() => { }}
+                                                            isOver={true}
+                                                            tooltipLabel={"Remove"}
+                                                            color={"dark"}
+                                                            icon={<IconTrash />}
+                                                        />
+                                                    </Group>
+                                                </Box>
+                                            </Group>
+                                        </Stack>
+
                                     </Card>
                                 </Link>
                             </GenericTransition>
@@ -87,6 +113,6 @@ export default function Home() {
                 }
             </SimpleGrid>
 
-        </>
+        </Layout>
     )
 }

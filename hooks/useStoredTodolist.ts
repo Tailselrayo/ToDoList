@@ -4,11 +4,19 @@ import { useListState, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 
 
-export function useStoredTodolist(index: number) {
+export function useStoredTodolist(idx: number) {
     const [toDoList, handlers] = useListState<TaskType>([]);
     const [storage, setStorage] = useLocalStorage<TodolistData[]>({ key: "toDoList" });
     const [isStorageLoaded, setIsStorageLoaded] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [index, setIndex] = useState(idx);
+
+    const changeIndex = (i: number) => {
+        if (storage && storage[i] && i !== index) {
+            setIndex(i);
+            handlers.setState(storage[i].toDoList);
+        }
+    }
 
     const applyOnId = (newTask: TaskType) => {
         handlers.applyWhere(
@@ -65,7 +73,7 @@ export function useStoredTodolist(index: number) {
     return (
         {
             toDoList,
-            handlers: {add: handlers.append, change, edit, toggleEdit, delete: deleteTask, priorityChange},
+            handlers: { add: handlers.append, change, edit, toggleEdit, delete: deleteTask, priorityChange, changeIndex },
             isError
         }
     )
