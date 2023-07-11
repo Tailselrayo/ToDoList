@@ -1,16 +1,13 @@
 import { TaskType } from "@/types/TaskType";
+import { TodolistData } from "@/types/TodolistData";
 import { useListState, useLocalStorage } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 
 
-export function useStoredTodolist() {
+export function useStoredTodolist(index: number) {
     const [toDoList, handlers] = useListState<TaskType>([]);
-    const [storage, setStorage] = useLocalStorage<TaskType[]>({ key: "toDoList" });
+    const [storage, setStorage] = useLocalStorage<TodolistData[]>({ key: "toDoList" });
     const [isStorageLoaded, setIsStorageLoaded] = useState(false);
-
-    const add = (task: TaskType) =>{
-        handlers.append(task);
-    }
 
     const applyOnId = (newTask: TaskType) => {
         handlers.applyWhere(
@@ -42,13 +39,19 @@ export function useStoredTodolist() {
     }
 
     useEffect(() => {
+        const copy = storage.slice();
+        let item: TodolistData;
         if (isStorageLoaded) {
-            setStorage(toDoList.map((elem) => ({ ...elem, isEditing: false })))
+            item = copy[index];
+            item.toDoList = toDoList.map((elem) => ({ ...elem, isEditing: false }))
+            copy[index] = item;
+            setStorage(copy)
         }
     }, [toDoList, isStorageLoaded]);
+
     useEffect(() => {
         if (!isStorageLoaded && storage) {
-            handlers.setState(storage);
+            handlers.setState(storage[index].toDoList);
             setIsStorageLoaded(true);
         }
     }, [storage, isStorageLoaded, handlers]);
@@ -56,7 +59,7 @@ export function useStoredTodolist() {
     return (
         {
             toDoList,
-            handlers: {add, change, edit, toggleEdit, delete: deleteTask, priorityChange}
+            handlers: {add: handlers.append, change, edit, toggleEdit, delete: deleteTask, priorityChange}
         }
     )
 
