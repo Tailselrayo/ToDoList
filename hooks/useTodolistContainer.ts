@@ -15,9 +15,15 @@ export function useTodolistContainer() {
     const edit = (list: TodolistData) => {
         handlers.applyWhere(
             (elem) => elem.id === list.id,
-            (elem) => ({...elem, name: list.name,color:  list.color})
+            (elem) => ({...elem, name: list.name,color:  list.color, deadline: list.deadline})
         )
     }
+
+    const formatList = () => {
+        return(
+            toDoListList.map((elem) => ({...elem, deadline: new Date(elem.deadline)}))
+        )
+    } 
 
     useEffect(() => {
 
@@ -35,7 +41,7 @@ export function useTodolistContainer() {
 
     return (
         {
-            toDoListList,
+            toDoListList: formatList(),
             handlers: {add: handlers.append, remove, edit}
         }
     )

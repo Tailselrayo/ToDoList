@@ -33,12 +33,13 @@ export function Layout(props: LayoutProps) {
             <AppShell
                 className={inter.className}
                 header={
-                    <Header height={60} p="md" bg="dark" style={{borderBottom: 0}} zIndex={1000}> 
+                    <Header height={60} p="md" bg="dark" style={{borderBottom: 0}} zIndex={200}> 
                         <Drawer
                             opened={opened}
                             onClose={handlers.close}
                             position="right"
                             title={<Text size="sm">Checkout existing TO-DO lists !</Text>}
+                            zIndex={201}
                         >
                             <Stack p="sm">
                                 {toDoListList.map((elem, index) => {
@@ -60,7 +61,7 @@ export function Layout(props: LayoutProps) {
                             <Group>
                                 <Link href="/">
                                     <ActionIcon color="gray.1">
-                                        <IconHome size={300} />
+                                        <IconHome  />
                                     </ActionIcon>
                                 </ Link>
                                 <Title size="lg" color="gray.1">
