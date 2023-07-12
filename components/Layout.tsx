@@ -5,6 +5,10 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconHome } from "@tabler/icons-react";
 import Link from "next/link";
 import { ReactNode } from "react";
+import '@/app/globals.css'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'] })
 
 interface LayoutProps {
     children: ReactNode;
@@ -26,11 +30,10 @@ export function Layout(props: LayoutProps) {
 
     return (
         <MantineProvider theme={{ globalStyles: generateTheme }}>
-
-
             <AppShell
+                className={inter.className}
                 header={
-                    <Header height={60} p="md" bg="dark">
+                    <Header height={60} p="md" bg="dark" style={{borderBottom: 0}}>
                         <Drawer
                             opened={opened}
                             onClose={handlers.close}
@@ -70,8 +73,8 @@ export function Layout(props: LayoutProps) {
                         </Group>
                     </Header>
                 }
-                bg={props.bgColor ? theme.fn.linearGradient(90, ...props.bgColor) : undefined}
-                m={0}
+                bg={props.bgColor ? theme.fn.linearGradient(135, ...props.bgColor) : undefined}
+                p={0}
 
             >
                 {props.children}
