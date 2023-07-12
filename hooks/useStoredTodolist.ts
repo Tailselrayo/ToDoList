@@ -75,8 +75,6 @@ export function useStoredTodolist(idx: number) {
             toDoList,
             handlers: { add: handlers.append, change, edit, toggleEdit, delete: deleteTask, priorityChange, changeIndex },
             isError, 
-            color: storage?.[index]?.color, 
-            name: storage?.[index]?.name,
         }
     )
 
