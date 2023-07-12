@@ -22,6 +22,7 @@ export function ModalEdition(props: ModalEditionProps) {
 
     return (
         <Modal
+            zIndex={1001}
             onClose={props.onClose}
             opened={props.isOpened}
             title={(props.isEdit) ? <Title size="md">Edit selected to-do list</Title> : <Title size="md">Create a new to-do list</Title>}

@@ -14,7 +14,7 @@ export function GenericTransition(props: GenericTransitionProps) {
     return (
         <Transition mounted={true} transition="scale" duration={500}>
             {(styles) => (
-                <Box style={{...styles}}>
+                <Box h="100%" style={{...styles}}>
                     {props.children}
                 </Box>
             )}
