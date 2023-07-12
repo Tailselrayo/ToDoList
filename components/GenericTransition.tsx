@@ -12,9 +12,9 @@ export function GenericTransition(props: GenericTransitionProps) {
     // permet de laisser le temps au composant de se créer avant de démarrer la transi
 
     return (
-        <Transition mounted={isMounted} transition="scale" duration={500}>
+        <Transition mounted={true} transition="scale" duration={500}>
             {(styles) => (
-                <Box style={styles}>
+                <Box style={{...styles}}>
                     {props.children}
                 </Box>
             )}

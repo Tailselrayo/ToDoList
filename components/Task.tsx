@@ -5,6 +5,7 @@ import { IconPencil, IconTrash, IconCheck } from "@tabler/icons-react";
 import { Checkbox } from "./Checkbox";
 import { ScaleButton } from "./ScaleButton";
 import { GenericTransition } from "./GenericTransition";
+import { useMediaQuery } from "@mantine/hooks";
 
 interface TaskProps extends TaskType {
     onChange: (task: TaskType) => void;
@@ -16,6 +17,7 @@ interface TaskProps extends TaskType {
 
 export function Task(props: TaskProps) {
     const [isOver, setIsOver] = useState(false);
+    const isMobile = useMediaQuery('(max-width: 760px)')
 
     const onSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -78,7 +80,7 @@ export function Task(props: TaskProps) {
                             <Group position="right" spacing="xs">
                                 <ScaleButton
                                     onClick={() => props.onToggleEdit(props)}
-                                    isOver={isOver || props.isEditing}
+                                    isOver={isOver || props.isEditing || isMobile}
                                     tooltipLabel={props.isEditing ? "confirm" : "edit"}
                                     color="green"
                                     icon={props.isEditing ? <IconCheck /> : <IconPencil />}
@@ -86,7 +88,7 @@ export function Task(props: TaskProps) {
                                 />
                                 <ScaleButton
                                     onClick={onDelete}
-                                    isOver={isOver || props.isEditing}
+                                    isOver={isOver || props.isEditing || isMobile}
                                     tooltipLabel="delete"
                                     color="orange"
                                     icon={<IconTrash />}

@@ -33,7 +33,7 @@ export function Layout(props: LayoutProps) {
             <AppShell
                 className={inter.className}
                 header={
-                    <Header height={60} p="md" bg="dark" style={{borderBottom: 0}}>
+                    <Header height={60} p="md" bg="dark" style={{borderBottom: 0}} zIndex={1000}> 
                         <Drawer
                             opened={opened}
                             onClose={handlers.close}
