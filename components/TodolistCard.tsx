@@ -1,6 +1,6 @@
 import { TodolistData } from "@/types/TodolistData";
 import { GenericTransition } from "./GenericTransition";
-import { HoverCard, Card, Stack, Title, Group, Box, useMantineTheme } from "@mantine/core";
+import { Text, HoverCard, Card, Stack, Title, Group, Box, useMantineTheme, Indicator, Tooltip } from "@mantine/core";
 import { IconPencil, IconTrash } from "@tabler/icons-react";
 import Link from "next/link";
 import { ScaleButton } from "./ScaleButton";
@@ -14,22 +14,36 @@ interface TodolistCardProps extends TodolistData {
 
 export function TodolistCard(props: TodolistCardProps) {
     const theme = useMantineTheme();
+    const taskCount = props.toDoList.filter((elem) => elem.done === true).length;
+    const taskTally = props.toDoList.length;
+    const hidden = !taskTally || taskCount === taskTally;
 
     return (
-        <Box style={{zIndex: 300 - 10 * props.index, position: "relative"}}>
+        <Box h="100%" style={{ zIndex: 300 - props.index, position: "relative" }}>
             <GenericTransition>
                 <HoverCard width={100} withArrow shadow="lg">
                     <HoverCard.Target>
-                        <Link href={`/todolist/${props.index}`} style={{ textDecoration: "none" }}>
-                            <Card h={150} bg={theme.fn.linearGradient(135, ...props.color)}>
-                                <Stack>
-                                    <Title ta="center">{props.name}</Title>
-                                </Stack>
+                        <Link href={`/todolist/${props.index}`} style={{ textDecoration: "none", height: "100%", display: "block" }}>
+                            <Indicator
+                                h="100%"
+                                size={20}
+                                position="top-center"
+                                color={hidden ? (taskTally ? "green.4" : "red.8") : "transparent"}
+                                label={hidden ? (taskTally ? "Complete" : "Empty") : ""}
+                            >
+                                <Card h="100%" bg={theme.fn.linearGradient(135, ...props.color)} padding="lg">
+                                    <Stack h="100%" justify="space-between">
+                                        <Title lineClamp={1} fz="xl" ta="center">{props.name}</Title>
+                                        <Text display={!taskTally ? "none" : "block"} ta="right" italic >
+                                            {taskCount} tasks done out of {taskTally}
+                                        </Text>
+                                    </Stack>
 
-                            </Card>
+                                </Card>
+                            </Indicator>
                         </Link>
                     </HoverCard.Target>
-                    <HoverCard.Dropdown display={props.isHidden ? "none" : "block"} bg="gray.2" style={{border: 0}}>
+                    <HoverCard.Dropdown display={props.isHidden ? "none" : "block"} bg="gray.2" style={{ border: 0 }}>
                         <Group position="center">
                             <Box>
                                 <Group position="right">
