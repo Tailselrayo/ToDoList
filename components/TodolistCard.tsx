@@ -16,7 +16,7 @@ export function TodolistCard(props: TodolistCardProps) {
     const theme = useMantineTheme();
     const taskCount = props.toDoList.filter((elem) => elem.done === true).length;
     const taskTally = props.toDoList.length;
-    const hidden = !taskTally || taskCount === taskTally;
+    const hidden = taskTally !== 0 && taskCount !== taskTally;
 
     return (
         <Box h="100%" style={{ zIndex: 300 - props.index, position: "relative" }}>
@@ -28,8 +28,10 @@ export function TodolistCard(props: TodolistCardProps) {
                                 h="100%"
                                 size={20}
                                 position="top-center"
-                                color={hidden ? (taskTally ? "green.4" : "red.8") : "transparent"}
-                                label={hidden ? (taskTally ? "Complete" : "Empty") : ""}
+                                disabled={hidden}
+                                withBorder
+                                color={(taskTally ? "green.4" : "red.8")}
+                                label={(taskTally ? "Complete" : "Empty")}
                             >
                                 <Card h="100%" bg={theme.fn.linearGradient(135, ...props.color)} padding="lg">
                                     <Stack h="100%" justify="space-between">
