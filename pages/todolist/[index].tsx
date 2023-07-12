@@ -5,7 +5,7 @@ import { Todolist } from "@/components/Todolist";
 import { useModalEdition } from "@/hooks/useModalEdition";
 import { useStoredTodolist } from "@/hooks/useStoredTodolist";
 import { useTodolistContainer } from "@/hooks/useTodolistContainer";
-import { Group, TextInput, Button, Stack, NativeSelect, Title, Affix } from "@mantine/core";
+import { Group, TextInput, Button, Stack, NativeSelect, Text, Title, Affix } from "@mantine/core";
 import { useInputState } from "@mantine/hooks";
 import { IconSettings } from "@tabler/icons-react";
 import { randomBytes } from "crypto";
@@ -70,7 +70,8 @@ export default function TodolistPage(props: TodolistPageProps) {  //default est 
       id: modalValues.editId,
       toDoList: [], 
       name: modalValues.title, 
-      color: modalValues.selectedColor }
+      color: modalValues.selectedColor,
+      deadline: modalValues.deadline}
   )})
   }
 
@@ -84,7 +85,13 @@ export default function TodolistPage(props: TodolistPageProps) {  //default est 
   return (
     <Layout bgColor={toDoListList?.[props.index]?.color}>
       <Stack maw={700} mx="auto" spacing="lg" bg="white" p="xl">
-        <Title align="center">{toDoListList?.[props.index]?.name}</Title>
+        <Group position="apart">
+          <Title align="center">{toDoListList?.[props.index]?.name}</Title>
+          <Stack justify="flex-start" spacing={0}>
+            <Text fw="bold" align="right">Until {toDoListList?.[props.index]?.deadline.toLocaleDateString()}</Text>
+            <Text italic align="right">at {toDoListList?.[props.index]?.deadline.toLocaleTimeString().slice(0,5)}</Text>
+          </Stack>
+        </Group>
         <form onSubmit={onSubmitTask}>
           <Group align="end" w="100%" grow>
             <TextInput
@@ -130,11 +137,13 @@ export default function TodolistPage(props: TodolistPageProps) {  //default est 
       <ModalEdition
         title={modalValues.title}
         color={modalValues.selectedColor}
+        deadline={modalValues.deadline}
         isOpened={modalValues.isModalOpened}
         isEdit
         onSubmit={onSubmitEdit}
         onTitleChange={modalHandlers.setTitle}
         onSColorChange={modalHandlers.setSelectedColor}
+        onDateChange={modalHandlers.setDate}
         onClose={modalHandlers.close}
       />
     </Layout>

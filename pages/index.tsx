@@ -25,7 +25,8 @@ export default function Home() {
             {id: (values.editId) ? values.editId : randomBytes(10).toString("hex"), 
             toDoList: [], 
             name: values.title, 
-            color: values.selectedColor }
+            color: values.selectedColor, 
+            deadline: values.deadline}
         )})
     }
 
@@ -34,12 +35,14 @@ export default function Home() {
             <ModalEdition
                 title={values.title}
                 color={values.selectedColor}
+                deadline={values.deadline}
                 isOpened={values.isModalOpened}
                 isEdit={values.editId !== ''}
                 onClose={modalHandlers.close}
                 onSubmit={onSubmit}
                 onSColorChange={modalHandlers.setSelectedColor}
                 onTitleChange={modalHandlers.setTitle}
+                onDateChange={modalHandlers.setDate}
             />
             <SimpleGrid
                 breakpoints={[{maxWidth: "md", cols:3}, {maxWidth: "sm", cols:2}, {maxWidth: "xs", cols:1}]}
@@ -58,7 +61,7 @@ export default function Home() {
                         )
                     })
                 }
-                <Center onClick={modalHandlers.create} h={150} bg="gray.3" style={{ borderRadius: theme.radius.md, cursor: "pointer" }}>
+                <Center onClick={modalHandlers.create} h="100%" bg="gray.3" style={{ borderRadius: theme.radius.md, cursor: "pointer" }}>
                     <IconPlus size={75} strokeWidth={1} />
                 </Center>
             </SimpleGrid>

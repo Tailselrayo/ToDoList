@@ -1,18 +1,19 @@
-import {  Text, Title, Stack, TextInput, Group, Button, Modal } from "@mantine/core";
+import { Text, Title, Stack, TextInput, Group, Button, Modal, Box } from "@mantine/core";
 import { ColorSelector } from "./ColorSelector";
 import { ColorPair } from "@/types/ColorPair";
-import { FormEvent } from "react";
-
-
+import { FormEvent, useState } from "react";
+import { DateTimePicker } from "@mantine/dates";
 
 interface ModalEditionProps {
     title: string;
     color: ColorPair;
+    deadline: Date;
     isOpened: boolean;
     isEdit: boolean;
     onSubmit: (e: FormEvent) => void;
     onTitleChange: (title: string) => void;
     onSColorChange: (color: ColorPair) => void;
+    onDateChange: (deadline: Date) => void;
     onClose: () => void;
 }
 
@@ -22,7 +23,7 @@ export function ModalEdition(props: ModalEditionProps) {
 
     return (
         <Modal
-            zIndex={1001}
+            zIndex={200}
             onClose={props.onClose}
             opened={props.isOpened}
             title={(props.isEdit) ? <Title size="md">Edit selected to-do list</Title> : <Title size="md">Create a new to-do list</Title>}
@@ -40,6 +41,16 @@ export function ModalEdition(props: ModalEditionProps) {
                         selectedColor={props.color}
                         label="Theme"
                         onChange={props.onSColorChange}
+                    />
+                    <DateTimePicker
+                        value={props.deadline}
+                        onChange={props.onDateChange}
+                        dropdownType="modal"
+                        w="100%"
+                        label={<Text fw="bold" fz="sm">Deadline</Text>}
+                        placeholder="Set a date and time limit"
+                        maw={400}
+                        mx="auto"
                     />
                     <Group position="right">
                         <Button type="submit" variant="gradient" gradient={{ to: "teal", from: "blue" }}>

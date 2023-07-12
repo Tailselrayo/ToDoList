@@ -6,4 +6,5 @@ export interface TodolistData {
     toDoList: TaskType[];
     name: string;
     color: ColorPair;
+    deadline: Date;
 }

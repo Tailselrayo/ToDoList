@@ -1,7 +1,7 @@
 import { TodolistData } from "@/types/TodolistData";
 import { GenericTransition } from "./GenericTransition";
 import { Text, HoverCard, Card, Stack, Title, Group, Box, useMantineTheme, Indicator, Tooltip } from "@mantine/core";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { IconCalendar, IconPencil, IconTrash } from "@tabler/icons-react";
 import Link from "next/link";
 import { ScaleButton } from "./ScaleButton";
 
@@ -19,7 +19,7 @@ export function TodolistCard(props: TodolistCardProps) {
     const hidden = taskTally !== 0 && taskCount !== taskTally;
 
     return (
-        <Box h="100%" style={{ zIndex: 300 - props.index, position: "relative" }}>
+        <Box h="100%" style={{ zIndex: 199 - props.index, position: "relative" }}>
             <GenericTransition>
                 <HoverCard width={100} withArrow shadow="lg">
                     <HoverCard.Target>
@@ -36,9 +36,21 @@ export function TodolistCard(props: TodolistCardProps) {
                                 <Card h="100%" bg={theme.fn.linearGradient(135, ...props.color)} padding="lg">
                                     <Stack h="100%" justify="space-between">
                                         <Title lineClamp={1} fz="xl" ta="center">{props.name}</Title>
-                                        <Text display={!taskTally ? "none" : "block"} ta="right" italic >
-                                            {taskCount} tasks done out of {taskTally}
-                                        </Text>
+                                        <Group position="apart">
+                                            <Tooltip
+                                                label={<Text>
+                                                            Deadline : le {props.deadline.toLocaleDateString()} à {props.deadline.toLocaleTimeString().slice(0,5)}
+                                                      </Text>}
+                                                withArrow
+                                                position="right"
+                                                openDelay={500}
+                                            >
+                                                <IconCalendar />
+                                            </Tooltip>
+                                            <Text display={!taskTally ? "none" : "block"} ta="right" italic >
+                                                {taskCount} task{taskCount >= 2? "s":""} done out of {taskTally}
+                                            </Text>
+                                        </Group>
                                     </Stack>
 
                                 </Card>
